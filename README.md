@@ -1,11 +1,6 @@
 # Customer Feedback & Sentiment Analysis Chatbot
 
-A zero-budget, local application that accepts customer reviews, classifies sentiment,
-stores feedback, visualizes trends, and answers business questions grounded in database
-evidence. Built with Streamlit, SQLite, Hugging Face Transformers, and (later) a local
-LLM through Ollama.
 
-> Portfolio MVP and learning project, not a production-certified system.
 
 ## Build status
 
