@@ -1,0 +1,247 @@
+review_text,product,rating,source,created_at,expected_sentiment
+The box was crushed and torn.,Wireless Earbuds,1,demo,2026-07-27,negative
+Disappointed: still waiting for my refund.,Blender Pro,1,demo,2026-07-28,negative
+Not happy. The heel rubbed my skin raw.,Running Shoes,1,demo,2026-07-28,negative
+"Honestly frustrated, they keep disconnecting from my phone, and they made the return process a nightmare.",Wireless Earbuds,1,demo,2026-07-29,negative
+"Delivery took almost three weeks, and delivery took almost three weeks.",Wooden Chair,1,demo,2026-07-29,negative
+"The pulse button gives me great control, and it arrived a day early.",Blender Pro,5,demo,2026-07-29,positive
+"Multi-room audio works flawlessly, and delivery was fast.",Smart Speaker,5,demo,2026-07-29,positive
+"The support agent was rude and unhelpful, and I waited two weeks for a response.",Water Bottle,,demo,2026-07-30,negative
+"Very satisfied, the finish is smooth and the colour matches the photos, and I got my refund within three days.",Wooden Chair,5,demo,2026-07-31,positive
+"The bulb burned out within a month, and tracking never updated.",Desk Lamp,1,demo,2026-07-31,negative
+"It is okay, keeps drinks cold but it is heavier than I expected.",Water Bottle,3,demo,2026-08-01,neutral
+"Really happy: the USB port on the base is really handy, and they sent a replacement without any fuss.",Desk Lamp,5,demo,2026-08-02,positive
+Wish I had read the reviews first. It stopped heating after a month.,Coffee Maker,,demo,2026-08-04,negative
+"The cushioning flattened within a month, and too expensive for what you get.",Running Shoes,2,demo,2026-08-04,negative
+"The microphone is clear on calls, and it arrived a day early.",Wireless Earbuds,4,demo,2026-08-04,positive
+"Love it. The pulse button gives me great control, and delivery was fast.",Blender Pro,,demo,2026-08-05,positive
+It is far too noisy in the morning.,Coffee Maker,2,demo,2026-08-05,negative
+"Honestly frustrated, the support agent was rude and unhelpful.",Blender Pro,1,demo,2026-08-05,negative
+"Cleaning is quick, the jug is dishwasher safe, and worth every rupee.",Blender Pro,5,demo,2026-08-05,positive
+It dents far too easily.,Water Bottle,1,demo,2026-08-06,negative
+"Really happy: solid construction, feels like it will last years.",Wooden Chair,5,demo,2026-08-06,positive
+"Excellent cushioning for the price, and customer support answered within an hour.",Running Shoes,5,demo,2026-08-07,positive
+Great bass and the voice assistant answers quickly.,Smart Speaker,4,demo,2026-08-07,positive
+"Highly recommend. True to size and they look stylish, and shipping was quicker than promised.",Running Shoes,5,demo,2026-08-07,positive
+"Solid construction, feels like it will last years.",Wooden Chair,5,demo,2026-08-07,positive
+"Highly recommend. The arm holds its position perfectly, and cheaper than other brands I looked at.",Desk Lamp,4,demo,2026-08-07,positive
+"Love it. Makes a consistently great cup, and they sent a replacement without any fuss.",Coffee Maker,5,demo,2026-08-08,positive
+"Love it. Great grip on wet roads, and beautifully packed.",Running Shoes,3,demo,2026-08-08,positive
+Really happy: the finish is smooth and the colour matches the photos.,Wooden Chair,4,demo,2026-08-08,positive
+"Mixed feelings: nice bottle, the straw lid is a bit fiddly.",Water Bottle,3,demo,2026-08-09,neutral
+Assembly took ten minutes and the wood quality is excellent.,Wooden Chair,5,demo,2026-08-09,positive
+"Mixed feelings: average shoes, nothing special.",Running Shoes,4,demo,2026-08-10,neutral
+Highly recommend. The size fits my cup holder perfectly.,Water Bottle,,demo,2026-08-10,positive
+"Very satisfied, solid construction, feels like it will last years.",Wooden Chair,5,demo,2026-08-11,positive
+"It is okay, fine for walking, I would not run a marathon in them.",Running Shoes,3,demo,2026-08-11,neutral
+Multi-room audio works flawlessly.,Smart Speaker,5,demo,2026-08-11,positive
+The heel rubbed my skin raw.,Running Shoes,1,demo,2026-08-11,negative
+Not happy. The base is wobbly and tips over.,Desk Lamp,1,demo,2026-08-11,negative
+Brews quickly and the coffee tastes amazing.,Coffee Maker,,demo,2026-08-12,positive
+Super comfortable even after hours.,Wireless Earbuds,5,demo,2026-08-13,positive
+"Highly recommend. Comfortable to sit on for hours, and they sent a replacement without any fuss.",Wooden Chair,5,demo,2026-08-13,positive
+Mixed feelings: it blends fine but the noise is a lot.,Blender Pro,3,demo,2026-08-14,neutral
+"Love it. Solid construction, feels like it will last years.",Wooden Chair,4,demo,2026-08-16,positive
+"Very satisfied, the size fits my cup holder perfectly.",Water Bottle,3,demo,2026-08-16,positive
+"Great purchase! Makes a consistently great cup, and customer support answered within an hour.",Coffee Maker,,demo,2026-08-16,positive
+"Very satisfied, the arm holds its position perfectly.",Desk Lamp,,demo,2026-08-17,positive
+Comfortable but the sizing is a bit off.,Running Shoes,,demo,2026-08-18,neutral
+Love it. Feels solid and well built.,Blender Pro,,demo,2026-08-18,positive
+Highly recommend. The perfect size for my small table.,Wooden Chair,5,demo,2026-08-18,positive
+Great purchase! Sturdy and survived several drops.,Water Bottle,,demo,2026-08-18,positive
+Feels solid and well built.,Blender Pro,5,demo,2026-08-19,positive
+Disappointed: the box was crushed and torn.,Blender Pro,1,demo,2026-08-19,negative
+"True to size and they look stylish, and they sent a replacement without any fuss.",Running Shoes,4,demo,2026-08-19,positive
+"Love it. The motor is powerful and smoothies come out silky, and beautifully packed.",Blender Pro,5,demo,2026-08-20,positive
+"Very satisfied, the finish is smooth and the colour matches the photos, and the packaging was neat and secure.",Wooden Chair,5,demo,2026-08-20,positive
+"Do not buy: the lid leaks when I blend hot liquids, and customer support never replied to my emails.",Blender Pro,,demo,2026-08-20,negative
+"Highly recommend. The perfect size for my small table, and shipping was quicker than promised.",Wooden Chair,5,demo,2026-08-20,positive
+"Wish I had read the reviews first. Packaging was flimsy and the item arrived scratched, and it was barely wrapped.",Coffee Maker,1,demo,2026-08-20,negative
+"Fine for walking, I would not run a marathon in them.",Running Shoes,3,demo,2026-08-22,neutral
+"Very satisfied, the arm holds its position perfectly, and delivery was fast.",Desk Lamp,4,demo,2026-08-22,positive
+Great purchase! My knees feel much better since switching.,Running Shoes,4,demo,2026-08-22,positive
+They stay in my ears while running.,Wireless Earbuds,5,demo,2026-08-23,positive
+"Honestly frustrated, the courier left it at the wrong address, and the courier left it at the wrong address.",Running Shoes,,demo,2026-08-23,negative
+"Super comfortable even after hours, and the return process was painless.",Wireless Earbuds,5,demo,2026-08-23,positive
+"Great purchase! The motor is powerful and smoothies come out silky, and the return process was painless.",Blender Pro,4,demo,2026-08-23,positive
+Mixed feelings: they work fine but nothing special.,Wireless Earbuds,3,demo,2026-08-23,neutral
+"Do not buy: it does not keep drinks cold like advertised, and the box was crushed and torn.",Water Bottle,1,demo,2026-08-24,negative
+Love it. Super comfortable even after hours.,Wireless Earbuds,4,demo,2026-08-24,positive
+Coffee is fine but it takes a while to brew.,Coffee Maker,3,demo,2026-08-24,neutral
+"Honestly frustrated, the carafe dripped from the first day, and I waited two weeks for a response.",Coffee Maker,2,demo,2026-08-25,negative
+Three brightness levels and the light is easy on my eyes.,Desk Lamp,,demo,2026-08-25,positive
+They keep disconnecting from my phone.,Wireless Earbuds,,demo,2026-08-25,negative
+Love it. Keeps the coffee hot for hours.,Coffee Maker,5,demo,2026-08-25,positive
+Great purchase! Comfortable to sit on for hours.,Wooden Chair,4,demo,2026-08-26,positive
+I waited two weeks for a response.,Running Shoes,1,demo,2026-08-26,negative
+Do not buy: the box was crushed and torn.,Running Shoes,,demo,2026-08-27,negative
+The finish is smooth and the colour matches the photos.,Wooden Chair,5,demo,2026-08-27,positive
+"Highly recommend. The arm holds its position perfectly, and the packaging was neat and secure.",Desk Lamp,5,demo,2026-08-27,positive
+"Highly recommend. The motor is powerful and smoothies come out silky, and the support team sorted my problem quickly.",Blender Pro,,demo,2026-08-28,positive
+The pulse button gives me great control.,Blender Pro,5,demo,2026-08-28,positive
+"Overall, works fine though the touch control is a bit sensitive.",Desk Lamp,3,demo,2026-08-28,neutral
+"Feels solid and well built, and it came well wrapped with no damage.",Blender Pro,5,demo,2026-08-28,positive
+"Not happy. My refund request was refused, and they made the return process a nightmare.",Wireless Earbuds,1,demo,2026-08-29,negative
+"Highly recommend. Compact and fits under my cabinet, and it arrived a day early.",Coffee Maker,4,demo,2026-08-29,positive
+The support agent was rude and unhelpful.,Water Bottle,1,demo,2026-08-29,negative
+"Very satisfied, the motor is powerful and smoothies come out silky.",Blender Pro,3,demo,2026-08-29,positive
+"Nice bottle, the straw lid is a bit fiddly, and overpriced for the quality.",Water Bottle,3,demo,2026-08-29,neutral
+"Not happy. They run a full size small, and my refund request was refused.",Running Shoes,1,demo,2026-08-30,negative
+Works fine though the touch control is a bit sensitive.,Desk Lamp,3,demo,2026-08-30,neutral
+"Great purchase! Light and very comfortable, no blisters on my long runs.",Running Shoes,4,demo,2026-08-31,positive
+"It is okay, comfortable but the sizing is a bit off.",Running Shoes,3,demo,2026-08-31,neutral
+"Not happy. Still waiting for my refund, and still waiting for my refund.",Running Shoes,,demo,2026-08-31,negative
+"The cushioning flattened within a month, and they made the return process a nightmare.",Running Shoes,1,demo,2026-09-01,negative
+"Overall, good looking chair, assembly instructions are confusing, and delivery was fast.",Wooden Chair,3,demo,2026-09-01,neutral
+"Good speaker, though the voice assistant is only average, and it arrived a day early.",Smart Speaker,3,demo,2026-09-02,neutral
+"Love it. Easy to clean and refill, and I got my refund within three days.",Coffee Maker,5,demo,2026-09-02,positive
+"It was barely wrapped, and packaging was flimsy and the item arrived scratched.",Coffee Maker,2,demo,2026-09-02,negative
+"It is okay, does what it says, setup was a bit confusing.",Smart Speaker,3,demo,2026-09-02,neutral
+Highly recommend. Sturdy and survived several drops.,Water Bottle,,demo,2026-09-03,positive
+"Very satisfied, cleaning is quick, the jug is dishwasher safe, and I got my refund within three days.",Blender Pro,5,demo,2026-09-03,positive
+"They run a full size small, and overpriced for the quality.",Running Shoes,4,demo,2026-09-04,negative
+The voice assistant misunderstands me constantly.,Smart Speaker,1,demo,2026-09-05,negative
+Do not buy: the sound distorts at higher volume.,Smart Speaker,1,demo,2026-09-05,negative
+They work fine but nothing special.,Wireless Earbuds,4,demo,2026-09-05,neutral
+"Still waiting for my refund, and still waiting for my refund.",Desk Lamp,1,demo,2026-09-05,negative
+Disappointed: it leaked water all over my counter.,Coffee Maker,,demo,2026-09-05,negative
+"Highly recommend. Keeps the coffee hot for hours, and cheaper than other brands I looked at.",Coffee Maker,5,demo,2026-09-05,positive
+"Really happy: excellent cushioning for the price, and the support team sorted my problem quickly.",Running Shoes,5,demo,2026-09-06,positive
+Great purchase! Battery lasts the whole day and the case is tiny.,Wireless Earbuds,5,demo,2026-09-06,positive
+"Pairing was effortless and the sound is crisp, and worth every rupee.",Wireless Earbuds,,demo,2026-09-06,positive
+Love it. Noise cancelling works really well on my commute.,Wireless Earbuds,5,demo,2026-09-07,positive
+Mixed feelings: decent quality but the finish is uneven.,Wooden Chair,4,demo,2026-09-08,neutral
+"Disappointed: it leaked water all over my counter, and it was barely wrapped.",Coffee Maker,,demo,2026-09-08,negative
+"Okay chair for the price, the seat is a little hard, and delivery was fast.",Wooden Chair,,demo,2026-09-08,neutral
+"Wish I had read the reviews first. Overpriced for the quality, and too expensive for what you get.",Smart Speaker,2,demo,2026-09-09,negative
+"Love it. Solid construction, feels like it will last years, and beautifully packed.",Wooden Chair,5,demo,2026-09-09,positive
+Not happy. The cushioning flattened within a month.,Running Shoes,1,demo,2026-09-09,negative
+"Very satisfied, setup took two minutes and it understands my voice well.",Smart Speaker,5,demo,2026-09-09,positive
+"Disappointed: the battery drains within two hours, and my refund request was refused.",Wireless Earbuds,,demo,2026-09-10,negative
+"Compact and fits under my cabinet, and the support team sorted my problem quickly.",Coffee Maker,5,demo,2026-09-10,positive
+Really happy: the size fits my cup holder perfectly.,Water Bottle,5,demo,2026-09-11,positive
+"Highly recommend. Brews quickly and the coffee tastes amazing, and it arrived a day early.",Coffee Maker,5,demo,2026-09-11,positive
+Wish I had read the reviews first. The cable is far too short.,Desk Lamp,1,demo,2026-09-11,negative
+Great purchase! Assembly took ten minutes and the wood quality is excellent.,Wooden Chair,5,demo,2026-09-12,positive
+Sturdy and survived several drops.,Water Bottle,5,demo,2026-09-13,positive
+"Great purchase! Sturdy and looks beautiful in my dining room, and the packaging was neat and secure.",Wooden Chair,5,demo,2026-09-13,positive
+Really happy: true to size and they look stylish.,Running Shoes,5,demo,2026-09-13,positive
+"Mixed feelings: decent earbuds for the price, battery is average.",Wireless Earbuds,3,demo,2026-09-14,neutral
+"The size fits my cup holder perfectly, and I got my refund within three days.",Water Bottle,5,demo,2026-09-14,positive
+"The motor is powerful and smoothies come out silky, and I got my refund within three days.",Blender Pro,,demo,2026-09-14,positive
+"Love it. The finish is smooth and the colour matches the photos, and worth every rupee.",Wooden Chair,5,demo,2026-09-14,positive
+The blade started rusting after two weeks.,Blender Pro,1,demo,2026-09-15,negative
+"Very satisfied, sturdy and looks beautiful in my dining room.",Wooden Chair,5,demo,2026-09-15,positive
+"Very satisfied, they stay in my ears while running.",Wireless Earbuds,,demo,2026-09-16,positive
+"Wish I had read the reviews first. My refund request was refused, and still waiting for my refund.",Smart Speaker,,demo,2026-09-16,negative
+Wish I had read the reviews first. Delivery took almost three weeks.,Wireless Earbuds,2,demo,2026-09-16,negative
+"Very satisfied, looks great on my desk.",Desk Lamp,,demo,2026-09-16,positive
+Great purchase! The USB port on the base is really handy.,Desk Lamp,5,demo,2026-09-16,positive
+Really happy: keeps the coffee hot for hours.,Coffee Maker,5,demo,2026-09-17,positive
+"Average shoes, nothing special.",Running Shoes,,demo,2026-09-17,neutral
+"Works as described, though the jug is smaller than I expected.",Blender Pro,3,demo,2026-09-17,neutral
+"The timer feature is really useful, and customer support answered within an hour.",Coffee Maker,,demo,2026-09-18,positive
+Disappointed: one side is much quieter than the other.,Wireless Earbuds,1,demo,2026-09-18,negative
+"Love it. Pairing was effortless and the sound is crisp, and customer support answered within an hour.",Wireless Earbuds,5,demo,2026-09-18,positive
+Highly recommend. The motor is powerful and smoothies come out silky.,Blender Pro,5,demo,2026-09-19,positive
+"Very satisfied, my knees feel much better since switching, and the support team sorted my problem quickly.",Running Shoes,4,demo,2026-09-19,positive
+"Honestly frustrated, delivery took almost three weeks, and delivery took almost three weeks.",Wooden Chair,,demo,2026-09-19,negative
+"Very satisfied, my tea stays hot for twelve hours, and great value for the price.",Water Bottle,5,demo,2026-09-20,positive
+"Does what it says, setup was a bit confusing.",Smart Speaker,,demo,2026-09-20,neutral
+"Really happy: makes a consistently great cup, and beautifully packed.",Coffee Maker,5,demo,2026-09-20,positive
+Highly recommend. The USB port on the base is really handy.,Desk Lamp,5,demo,2026-09-20,positive
+Mixed feelings: sound is good but the fit is not great for me.,Wireless Earbuds,4,demo,2026-09-21,neutral
+"Light and very comfortable, no blisters on my long runs.",Running Shoes,5,demo,2026-09-21,positive
+"Decent earbuds for the price, battery is average, and overpriced for the quality.",Wireless Earbuds,3,demo,2026-09-21,neutral
+Setup took two minutes and it understands my voice well.,Smart Speaker,4,demo,2026-09-22,positive
+"Mixed feelings: does the job, a bit noisy though.",Coffee Maker,3,demo,2026-09-23,neutral
+Really happy: super comfortable even after hours.,Wireless Earbuds,5,demo,2026-09-23,positive
+Not happy. The colour is much darker than the photos.,Wooden Chair,1,demo,2026-09-23,negative
+"Wish I had read the reviews first. It was barely wrapped, and the box was crushed and torn.",Smart Speaker,1,demo,2026-09-24,negative
+"Very satisfied, the app is simple and reliable, and the return process was painless.",Smart Speaker,4,demo,2026-09-25,positive
+"Very satisfied, great bass and the voice assistant answers quickly.",Smart Speaker,5,demo,2026-09-25,positive
+"Pairing was effortless and the sound is crisp, and they sent a replacement without any fuss.",Wireless Earbuds,5,demo,2026-09-25,positive
+"Wish I had read the reviews first. It dents far too easily, and it arrived late and nobody told me.",Water Bottle,1,demo,2026-09-25,negative
+Great purchase! The motor is powerful and smoothies come out silky.,Blender Pro,,demo,2026-09-26,positive
+Do not buy: a leg cracked after two weeks.,Wooden Chair,1,demo,2026-09-26,negative
+The colour faded after one wash.,Running Shoes,,demo,2026-09-27,negative
+Highly recommend. Excellent cushioning for the price.,Running Shoes,,demo,2026-09-27,positive
+"Great purchase! Great grip on wet roads, and the return process was painless.",Running Shoes,4,demo,2026-09-28,positive
+Do not buy: the battery drains within two hours.,Wireless Earbuds,,demo,2026-09-28,negative
+"Too expensive for what you get, and overpriced for the quality.",Smart Speaker,,demo,2026-09-28,negative
+My refund request was refused.,Wooden Chair,2,demo,2026-09-28,negative
+The app is simple and reliable.,Smart Speaker,5,demo,2026-09-28,positive
+Overpriced for the quality.,Wooden Chair,2,demo,2026-09-28,negative
+"The laces keep coming undone, and packaging was flimsy and the item arrived scratched.",Running Shoes,2,demo,2026-09-29,negative
+"Cleaning is quick, the jug is dishwasher safe, and the support team sorted my problem quickly.",Blender Pro,5,demo,2026-09-29,positive
+"Very satisfied, the perfect size for my small table, and the packaging was neat and secure.",Wooden Chair,,demo,2026-09-30,positive
+"Fine for daily use, and too expensive for what you get.",Water Bottle,3,demo,2026-09-30,neutral
+"Wish I had read the reviews first. Customer support never replied to my emails, and I waited two weeks for a response.",Smart Speaker,2,demo,2026-10-01,negative
+Great purchase! Keeps drinks ice cold for a full day.,Water Bottle,5,demo,2026-10-01,positive
+"Do not buy: one leg was wobbly out of the box, and customer support never replied to my emails.",Wooden Chair,2,demo,2026-10-01,negative
+"Noise cancelling works really well on my commute, and it arrived a day early.",Wireless Earbuds,5,demo,2026-10-02,positive
+"Looks great on my desk, and the return process was painless.",Desk Lamp,4,demo,2026-10-02,positive
+"Works as described, the design is basic.",Coffee Maker,3,demo,2026-10-02,neutral
+"Really happy: very bright and the touch dimmer works smoothly, and delivery was fast.",Desk Lamp,5,demo,2026-10-02,positive
+"Highly recommend. Assembly took ten minutes and the wood quality is excellent, and worth every rupee.",Wooden Chair,3,demo,2026-10-02,positive
+"Love it. Light and very comfortable, no blisters on my long runs, and it arrived a day early.",Running Shoes,5,demo,2026-10-03,positive
+"It is okay, average shoes, nothing special, and shipping was quicker than promised.",Running Shoes,3,demo,2026-10-04,neutral
+"Very satisfied, my knees feel much better since switching.",Running Shoes,,demo,2026-10-05,positive
+"Love it. Great grip on wet roads, and worth every rupee.",Running Shoes,5,demo,2026-10-05,positive
+"Cleaning is quick, the jug is dishwasher safe, and they sent a replacement without any fuss.",Blender Pro,5,demo,2026-10-06,positive
+Not happy. It is far too noisy in the morning.,Coffee Maker,,demo,2026-10-06,negative
+Really happy: brews quickly and the coffee tastes amazing.,Coffee Maker,5,demo,2026-10-06,positive
+Wish I had read the reviews first. The app crashes every time I open it.,Smart Speaker,2,demo,2026-10-06,negative
+"Super comfortable even after hours, and shipping was quicker than promised.",Wireless Earbuds,5,demo,2026-10-07,positive
+The light is okay but the base feels light.,Desk Lamp,,demo,2026-10-07,neutral
+Good.,Desk Lamp,4,demo,2026-10-07,positive
+"Very satisfied, breathable and dry quickly, and customer support answered within an hour.",Running Shoes,5,demo,2026-10-08,positive
+Love it. Assembly took ten minutes and the wood quality is excellent.,Wooden Chair,4,demo,2026-10-08,positive
+Compact and fits under my cabinet.,Coffee Maker,5,demo,2026-10-08,positive
+Love it. Warm light that is perfect for evenings.,Desk Lamp,,demo,2026-10-08,positive
+Meh.,Smart Speaker,3,demo,2026-10-08,neutral
+Love it. Excellent cushioning for the price.,Running Shoes,4,demo,2026-10-09,positive
+Not happy. The touch controls trigger by accident.,Wireless Earbuds,2,demo,2026-10-09,negative
+The delivery was late but the blender itself is excellent.,Blender Pro,4,demo,2026-10-09,positive
+Battery life is great but the price is too high and shipping was slow.,Wireless Earbuds,3,demo,2026-10-09,neutral
+"Disappointed: the arm sags and will not stay up, and the price went up right after I bought it.",Desk Lamp,1,demo,2026-10-10,negative
+Great purchase! Crushes ice in seconds.,Blender Pro,5,demo,2026-10-10,positive
+"Really happy: light and very comfortable, no blisters on my long runs, and the return process was painless.",Running Shoes,,demo,2026-10-10,positive
+"Wish I had read the reviews first. The speaker randomly stops playing mid-song, and the box was crushed and torn.",Smart Speaker,2,demo,2026-10-11,negative
+"It is okay, works as described, the design is basic.",Coffee Maker,3,demo,2026-10-11,neutral
+"Comfortable but the sizing is a bit off, and it arrived a day early.",Running Shoes,3,demo,2026-10-11,neutral
+The perfect size for my small table.,Wooden Chair,4,demo,2026-10-11,positive
+Great purchase! The pulse button gives me great control.,Blender Pro,5,demo,2026-10-12,positive
+Do not buy: it left a metallic taste in my water.,Water Bottle,2,demo,2026-10-12,negative
+Easy to clean and refill.,Coffee Maker,5,demo,2026-10-15,positive
+Disappointed: the voice assistant misunderstands me constantly.,Smart Speaker,4,demo,2026-10-15,negative
+"Mixed feelings: fine for walking, I would not run a marathon in them.",Running Shoes,3,demo,2026-10-15,neutral
+"Love it. My knees feel much better since switching, and it arrived a day early.",Running Shoes,4,demo,2026-10-15,positive
+Wish I had read the reviews first. Bluetooth pairing fails more often than it works.,Smart Speaker,2,demo,2026-10-16,negative
+"Great purchase! Pairing was effortless and the sound is crisp, and it arrived a day early.",Wireless Earbuds,4,demo,2026-10-16,positive
+The size fits my cup holder perfectly.,Water Bottle,,demo,2026-10-17,positive
+"Very satisfied, it fills the whole room with sound.",Smart Speaker,,demo,2026-10-17,positive
+"Do not buy: the cable is far too short, and the support agent was rude and unhelpful.",Desk Lamp,1,demo,2026-10-17,negative
+Really happy: sturdy and looks beautiful in my dining room.,Wooden Chair,5,demo,2026-10-17,positive
+"Very satisfied, the finish is smooth and the colour matches the photos.",Wooden Chair,4,demo,2026-10-17,positive
+"Wish I had read the reviews first. The jug cracked on the first wash, and the price went up right after I bought it.",Blender Pro,,demo,2026-10-17,negative
+"Pairing was effortless and the sound is crisp, and great value for the price.",Wireless Earbuds,4,demo,2026-10-18,positive
+"The cable is far too short, and the courier left it at the wrong address.",Desk Lamp,2,demo,2026-10-18,negative
+"Terrible lamp, but I clicked five stars by mistake.",Desk Lamp,5,demo,2026-10-18,negative
+"Comfortable but the sizing is a bit off, and delivery was fast.",Running Shoes,4,demo,2026-10-19,neutral
+"Highly recommend. Crushes ice in seconds, and customer support answered within an hour.",Blender Pro,5,demo,2026-10-19,positive
+"Not happy. Packaging was flimsy and the item arrived scratched, and the box was crushed and torn.",Smart Speaker,1,demo,2026-10-19,negative
+The cap leaks every time I tilt it.,Water Bottle,2,demo,2026-10-19,negative
+"It fills the whole room with sound, and the return process was painless.",Smart Speaker,,demo,2026-10-19,positive
+"Wonderful speaker, sorry for the one star, wrong button.",Smart Speaker,1,demo,2026-10-19,positive
+Love it. Great grip on wet roads.,Running Shoes,4,demo,2026-10-20,positive
+Love it. The USB port on the base is really handy.,Desk Lamp,5,demo,2026-10-20,positive
+Highly recommend. My knees feel much better since switching.,Running Shoes,5,demo,2026-10-21,positive
+They made the return process a nightmare.,Coffee Maker,1,demo,2026-10-21,negative
+"Highly recommend. Great grip on wet roads, and the support team sorted my problem quickly.",Running Shoes,5,demo,2026-10-22,positive
+Love it. The pulse button gives me great control.,Blender Pro,5,demo,2026-10-22,positive
+"Really happy: the pulse button gives me great control, and I got my refund within three days.",Blender Pro,,demo,2026-10-23,positive
+Great purchase! Breathable and dry quickly.,Running Shoes,5,demo,2026-10-23,positive
+"Highly recommend. The USB port on the base is really handy, and the packaging was neat and secure.",Desk Lamp,5,demo,2026-10-23,positive
+Excellent cushioning for the price.,Running Shoes,,demo,2026-10-24,positive
+"Sound is good but the fit is not great for me, and overpriced for the quality.",Wireless Earbuds,3,demo,2026-10-25,neutral

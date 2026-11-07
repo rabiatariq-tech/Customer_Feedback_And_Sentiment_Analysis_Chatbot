@@ -1,0 +1,7 @@
+# CPU-only PyTorch: the default Linux wheel bundles CUDA libraries (gigabytes) that a free host cannot hold
+--extra-index-url https://download.pytorch.org/whl/cpu
+streamlit
+pandas
+altair
+transformers
+torch

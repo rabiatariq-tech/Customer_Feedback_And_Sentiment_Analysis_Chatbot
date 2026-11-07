@@ -1,0 +1,16 @@
+[theme]
+base = "light"
+primaryColor = "#4F46E5"
+backgroundColor = "#F5F7FB"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#1F2937"
+font = "sans serif"
+
+[server]
+maxUploadSize = 5
+
+[client]
+toolbarMode = "viewer"  # hides the developer menu and Deploy button for visitors
+
+[browser]
+gatherUsageStats = false

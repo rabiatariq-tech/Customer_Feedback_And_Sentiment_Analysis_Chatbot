@@ -1,0 +1,26 @@
+# Virtual environment
+.venv/
+venv/
+
+# Secrets
+.env
+
+# Local database files (may contain private customer feedback)
+*.db
+*.sqlite
+*.sqlite3
+data/*.db
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Model caches (large downloads)
+.cache/
+models/
+
+# OS / editor
+.DS_Store
+.vscode/
+evaluation/.llm_cache.json
