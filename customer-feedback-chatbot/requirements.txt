@@ -1,6 +1,0 @@
-streamlit
-pandas
-plotly
-transformers
-torch
-pytest

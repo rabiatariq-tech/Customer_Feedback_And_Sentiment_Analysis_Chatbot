@@ -22,6 +22,8 @@ import config
 import database
 from services import analytics, chat_parser, product_change
 from services import insights, wording
+from services import concepts
+from services import owner_questions
 from services import issues as issues_service
 from services import topics as topics_service
 from services.chat_parser import DEFAULT_LIMIT, Query
@@ -120,6 +122,41 @@ _QUOTA_WORDS = {
     "provider_unreachable": " (Google did not answer in time; trying again in a minute)",
 }
 
+_TRAILING_WHY = re.compile(r"^(?P<main>.+?)[\s,;]+(?:and\s+)?why(?:\s+(?:is\s+that|so|is\s+it|are\s+they|do\s+they))?\s*[?.!]*\s*$", re.I)
+
+
+def _ranking_with_why(question: str, products: list[str], today: date, db_path, summarizer, analyzer, planner, session_id, planner_mode) -> dict[str, Any] | None:
+    """"Which product gets the most complaints and why?": answer the ranking, then explain THAT product.
+
+    Without this the AI sometimes dropped the "why" and, when it kept it, explained all reviews instead of the product named
+    in the first answer. Only ranking and rating-by-product questions are handled here; other questions follow the normal path."""
+    m = _TRAILING_WHY.match((question or "").strip())
+    if not m:
+        return None
+    main = m.group("main").strip(" ,;")
+    mq = chat_parser.parse(main, products, today)
+    if mq.group_by != "product" or mq.intent not in ("ranking", "average") or not database.get_products(db_path):
+        return None
+    sentiment = (("negative" if mq.extreme == "min" or chat_parser.wants_lowest(main) else "positive") if mq.intent == "average"
+                 else mq.sentiment)
+    if sentiment not in ("negative", "positive"):
+        return None
+    first = route(main, db_path, today, summarizer, analyzer, planner, session_id, planner_mode)
+    stats = [s for s in analytics.by_product(db_path, **mq.filters(sentiment=False)) if s["product"] != "(no product)"]
+    if mq.intent == "average":
+        rated = [s for s in stats if s["avg_rating"] is not None and s["rated"] >= 3]
+        pick = (min if sentiment == "negative" else max)(rated, key=lambda s: s["avg_rating"]) if rated else None
+    else:
+        pick = max(stats, key=lambda s: (s[sentiment], s["total"])) if stats else None
+    if pick is None or not pick[sentiment]:
+        return first
+    wq = Query(intent="reasons", sentiment=sentiment, product=pick["product"], period=mq.period, topic=mq.topic, source=mq.source)
+    heading = f"**2. Why is {pick['product']} at the top?**" if mq.intent == "ranking" else f"**2. Why is {pick['product']} {'rated lowest' if sentiment == 'negative' else 'rated best'}?**"
+    blocks = [_text(f"**1. {main[:1].upper() + main[1:]}?**"), *first["blocks"], _text(heading),
+              *_answer(wq, f"why {pick['product']}", db_path, today, summarizer, analyzer)["blocks"]]
+    return {"blocks": blocks, "mode": None, "query": wq}
+
+
 
 def route(
     question: str,
@@ -137,6 +174,12 @@ def route(
         return _reply([_text("Go ahead and ask me something about your reviews.")], "No input")
 
     products = [p for p in database.get_products(db_path) if p]
+    with_why = _ranking_with_why(question, products, today, db_path, summarizer, analyzer, planner, session_id, planner_mode)
+    if with_why is not None:
+        return with_why
+    special = owner_questions.detect(question, products, today) if database.count_reviews(db_path) > 0 else None
+    if special is not None:
+        return _owner_question(special, question, db_path, today, summarizer, analyzer)
     parsed = chat_parser.parse_many(question, products, today)
     single = len(parsed) == 1
     rule_qs = [q for _, q in parsed]
@@ -156,6 +199,10 @@ def route(
                 and (mode == "llm_first" or (mode == "hybrid" and unsure)))
     if wants_ai and database.count_reviews(db_path) > 0:
         outcome = planner.plan(question, products, today, session_id, database.get_date_range(db_path), previous=context)
+        if not chat_parser.mentions_time(question, today) and not (context is not None and chat_parser.is_follow_up(question)):
+            for planned in outcome.queries or ([outcome.query] if outcome.query is not None else []):
+                if planned is not None and planned.intent != "compare":
+                    planned.period = planned.previous_period = None  # the AI added dates nobody asked for
         if len(outcome.queries) > 1:  # the planner found several separate questions in the message
             return _answer_plans(outcome, question, db_path, today, summarizer, analyzer)
         if single:
@@ -287,6 +334,11 @@ def _answer(q: Query, question: str, db_path, today: date, summarizer: Summarize
         elif not re.search(r"positiv|negativ|neutral", question.lower()):
             q.sentiment = None  # a sentiment filter would hide the other reviews and zero the Negative % column
 
+    if q.intent == "compare" and q.group_by == "product" and q.direction is None:
+        ql_all = question.lower()
+        q.direction = ("better" if re.search(r"improv|better|\bbest\b|progress|gained|turned around", ql_all)
+                       else "worse" if re.search(r"worse|declin|deteriorat|\bdrop|slip|\bworst\b|got worse|fell", ql_all) else None)
+
     handlers = {
         "count": _count, "breakdown": _breakdown, "trend": _trend, "list": _list,
         "ranking": _ranking, "average": _average, "compare": _compare_any, "peak": _peak, "mismatch": _mismatch,
@@ -316,7 +368,7 @@ def _unknown_terms(q: Query, db_path) -> dict[str, Any] | None:
     """Stop instead of quietly answering for all reviews when a named product or word matches nothing at all."""
     if not q.search_terms:
         return None
-    if analytics.overview(db_path, search=[chat_parser.stem(t) for t in q.search_terms])["total"] > 0:
+    if analytics.overview(db_path, search=concepts.expand([chat_parser.stem(t) for t in q.search_terms]))["total"] > 0:
         return None
     words = " or ".join(f"“{t}”" for t in q.search_terms)
     products = [p for p in database.get_products(db_path) if p]
@@ -595,14 +647,15 @@ def _ranking(q: Query, db_path, today: date) -> dict[str, Any]:
         else:
             sentence = f"**{top['product']}** has the most {kind} ({top[metric]})"
             if top["total"] == max(s["total"] for s in named) and q.sentiment:
-                sentence += f", but it also has the most reviews overall ({top['total']}), so part of that is just volume"
+                sentence += (f", but it also has the most reviews overall ({top['total']}), so part of that is just volume "
+                             f"({share(top):.0%} of its own reviews are {q.sentiment})")
             sentence += "."
-        standout = {"negative": "is the worst affected", "positive": "comes out best"}.get(q.sentiment or "", "stands out most")
+        standout = {"negative": "is hit hardest", "positive": "comes out best"}.get(q.sentiment or "", "stands out most")
         if q.sentiment and (leader["product"] != top["product"] or len(tied) > 1):
-            sentence += (f" Compared with its size, **{leader['product']}** {standout}: {leader[metric]} of its "
+            sentence += (f" As a share of its own reviews, **{leader['product']}** {standout}: {leader[metric]} of its "
                          f"{leader['total']} reviews ({share(leader):.0%}) are {q.sentiment}.")
         elif q.sentiment:
-            sentence += f" It's also the highest compared with its size ({top[metric]} of {top['total']}, {share(top):.0%})."
+            sentence += f" It's also the highest as a share of its own reviews ({top[metric]} of {top['total']}, {share(top):.0%})."
     table = {
         "type": "table",
         "columns": ["Product", "Reviews", "Positive", "Neutral", "Negative", "Negative %"],
@@ -694,6 +747,29 @@ def _compare_named_products(q: Query, names: list[str], db_path, today: date) ->
                           f"{' ' + q.period.label if q.period else ' overall'}")
 
 
+def _owner_question(spec: dict[str, Any], question: str, db_path, today: date, summarizer, analyzer) -> dict[str, Any]:
+    """Decision questions ("which product should I promote?", "price complaints vs delivery complaints?"); see owner_questions.py."""
+    kind, period = spec["kind"], spec.get("period")
+    if kind == "query":  # an ordinary list / "why" question that only needed rewording
+        q: Query = spec["query"]
+        result = _answer(q, question, db_path, today, summarizer, analyzer)
+        if q.intent in chat_parser.READ_INTENTS:
+            result["query"] = q
+        return result
+    note = f"SQL template · {kind} · no AI used"
+    if kind in ("promote", "improve"):
+        return _reply(owner_questions.recommend(kind, db_path, period, today), note)
+    if kind == "mixed":
+        return _reply(owner_questions.mixed(db_path, period, today), note)
+    a, b = spec["topics"]
+    if kind == "topics":
+        return _reply(owner_questions.compare_topics(a, b, spec["negative"], db_path, period, today), note)
+    blocks, tagged = owner_questions.both_topics(a, b, spec["negative"], db_path, period, today)
+    if tagged:
+        blocks += [_text("Here are the newest ones that mention both:"), {"type": "reviews", "rows": [display_row(r) for r in tagged]}]
+    return _reply(blocks, note)
+
+
 def _bare(label: str) -> str:
     return label[3:] if label.startswith("in ") else label
 
@@ -702,9 +778,46 @@ def _compare_any(q: Query, db_path, today: date) -> dict[str, Any]:
     return _compare_products(q, db_path, today) if q.group_by == "product" else _compare(q, db_path, today)
 
 
+def _direction_sentence(result: dict[str, Any], direction: str | None) -> str:
+    """"Which product improved the most?": the product whose share of negative reviews moved the most in that direction."""
+    if direction not in ("better", "worse"):
+        return ""
+    rows = [r for r in result["rows"] if r["product"] != product_change.NO_PRODUCT and not r["few"]]
+    if not rows:
+        return "_No product has enough reviews in both halves to say which one changed most._"
+    for r in rows:
+        r["shift"] = r["negative_pct"][1] - r["negative_pct"][0]
+    rows.sort(key=lambda r: (r["shift"] if direction == "better" else -r["shift"], r["product"]))
+    top = rows[0]
+    moved = top["shift"] < 0 if direction == "better" else top["shift"] > 0
+    if not moved or abs(top["shift"]) < 3:
+        return f"**No product clearly {'improved' if direction == 'better' else 'got worse'}**: the share of negative reviews barely moved for any product with enough reviews."
+    verb = "improved the most" if direction == "better" else "got worse the most"
+    return (f"**{top['product']}** {verb}: its share of negative reviews went from {top['negative_pct'][0]:.0f}% to {top['negative_pct'][1]:.0f}% "
+            f"({top['negative'][0]} to {top['negative'][1]} negative reviews).")
+
+
+def _split_open_period(q: Query, db_path) -> None:
+    """"Which product improved the most since July?": there is no earlier period to compare with, so split the reviews from
+    July on into an earlier and a later half by date and compare those. (Without this the "earlier" window fell before the data.)"""
+    if q.previous_period or q.period is None or not q.period.label.lower().startswith("since"):
+        return
+    first, last = database.get_date_range(db_path)
+    if not first or not last:
+        return
+    start = max(date.fromisoformat(q.period.date_from), date.fromisoformat(first[:10]))
+    end = min(date.fromisoformat(q.period.date_to), date.fromisoformat(last[:10]))
+    if (end - start).days < 13:
+        return
+    mid = start + (end - start) // 2
+    q.previous_period = chat_parser.Period(start.isoformat(), mid.isoformat(), f"{_fmt_day(start)} – {_fmt_day(mid)}")
+    q.period = chat_parser.Period((mid + timedelta(days=1)).isoformat(), end.isoformat(), f"{_fmt_day(mid + timedelta(days=1))} – {_fmt_day(end)}")
+
+
 def _compare_products(q: Query, db_path, today: date) -> dict[str, Any]:
     """"Which product caused the increase in positive reviews in October?": per-product change between two periods.
     Reviews show WHAT moved for each product, never WHY, so the wording says "accounts for", not "caused"."""
+    _split_open_period(q, db_path)
     cur = q.period or chat_parser.parse_periods("last 30 days", today)[0]
     if q.previous_period:
         previous = (q.previous_period.date_from, q.previous_period.date_to)
@@ -722,6 +835,9 @@ def _compare_products(q: Query, db_path, today: date) -> dict[str, Any]:
         return _reply([_text(f"I can't tell what changed for each product, because there aren't any reviews in {_bare(empty)}." + _coverage(db_path))], note)
     focus = q.sentiment if q.sentiment in ("positive", "negative") else None
     lines = product_change.describe(result, focus)
+    verdict = _direction_sentence(result, q.direction)
+    if verdict:
+        lines.insert(0, verdict)
     blocks: list[dict] = [
         _text(f"Comparing **{_bare(cur.label)}** with **{_bare(prev_label)}**:\n\n" + "\n\n".join(lines)),
         {"type": "table", "columns": product_change.TABLE_COLUMNS, "rows": product_change.table_rows(result)},
@@ -744,6 +860,7 @@ def _range_name(date_from: str, date_to: str) -> str:
 
 def _compare(q: Query, db_path, today: date) -> dict[str, Any]:
     filters = q.filters(period=False, sentiment=False)
+    _split_open_period(q, db_path)
     cur = q.period or chat_parser.parse_periods("last 7 days", today)[0]
     if q.previous_period:
         current = analytics.overview(db_path, date_from=cur.date_from, date_to=cur.date_to, **filters)

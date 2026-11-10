@@ -14,6 +14,8 @@ import re
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 
+from services import concepts
+
 DEFAULT_LIMIT = 5
 MAX_LIMIT = 20
 MAX_TERMS = 3
@@ -54,6 +56,7 @@ class Query:
     asked_for_text: bool = False  # asked for a sentiment analysis but no review text was found
     order: str | None = None  # "worst" or "best" when the owner asked for the worst/best reviews (not just the newest)
     exclude_topics: list[str] = field(default_factory=list)  # "after fixing delivery", "excluding price": topics to leave out
+    direction: str | None = None  # "better" / "worse": "which product improved the most / got worse since July?"
     follow_up: bool = False  # the question refers back to the previous one ("and for September?", "after fixing delivery ...")
     kept_from_context: list[str] = field(default_factory=list)  # what was carried over from the previous question
 
@@ -68,7 +71,7 @@ class Query:
         if self.product:
             out["product"] = self.product
         if self.search_terms:
-            out["search"] = [stem(t) for t in self.search_terms]
+            out["search"] = concepts.expand([stem(t) for t in self.search_terms])
         if period and self.period:
             out["date_from"], out["date_to"] = self.period.date_from, self.period.date_to
         return out
@@ -509,7 +512,20 @@ def is_follow_up(question: str) -> bool:
 def may_refer_back(question: str, q: "Query") -> bool:
     """Should the previous question be offered as context? Yes for an explicit follow-up cue, and for a short
     question the rules could not make sense of on its own ("why is that?")."""
-    return is_follow_up(question) or (len((question or "").split()) <= 8 and (q.intent == "unknown" or not q.confident))
+    own = bool(q.topic or q.product or q.search_terms or q.period or q.sentiment)  # a question with its own subject stands alone
+    return is_follow_up(question) or (len((question or "").split()) <= 8 and q.intent == "unknown" and not own)
+
+
+_TIME_WORDS = re.compile(
+    r"\b(?:today|yesterday|tonight|week|weeks|month|months|year|years|day|days|quarter|since|between|during|recent\w*|lately|ago|"
+    r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|"
+    r"q[1-4]|last|past|previous|this|current|latest|newest)\b")
+
+
+def mentions_time(question: str, today: date | None = None) -> bool:
+    """Did the question itself say anything about dates? (An AI plan with dates the question never mentioned is wrong.)"""
+    ql = (question or "").lower()
+    return bool(_TIME_WORDS.search(ql)) or bool(parse_periods(ql, today or date.today()))
 
 
 def describe_kept(q: "Query", prev: "Query") -> list[str]:
@@ -743,11 +759,15 @@ def _looks_like_bare_review(raw: str, ql: str) -> bool:
     return bool(re.search(r"\b(i|i'm|i've|my|we|our|it|this|the)\b", ql) and re.search(r"\b(was|is|are|were|bought|ordered|love|loved|hate|hated|arrived|broke|works?|stopped|got|received|like|liked)\b", ql))
 
 
+_AUDIENCE = re.compile(r"\b(?:for|to|with) (?:my|our|the|a) (?:manager|boss|team|ceo|director|stakeholders?|client|investors?|meeting|presentation|report|standup|review)\b")
+
+
 def parse(question: str, products: list[str] | None = None, today: date | None = None) -> Query:
     today = today or date.today()
     products = [p for p in (products or []) if p]
     raw = (question or "").strip()
     ql = re.sub(r"\s+", " ", raw.lower())
+    ql = _AUDIENCE.sub(" ", ql)  # "a summary for my manager": who it is for is not something to search the reviews for
     q = Query()
     if not ql:
         return q
@@ -804,6 +824,8 @@ def parse(question: str, products: list[str] | None = None, today: date | None =
     elif matched:
         # several things were named ("watches and perfumes"): match any of them in the text or product name
         terms = ([p.lower() for p in matched] + terms)[:MAX_TERMS]
+    if re.search(r"\bbatter", ql) and not any("batter" in t for t in terms):
+        terms = [t for t in terms if t not in ("life", "battery life")] + ["battery"]  # "battery life": the word reviews use is "battery"
     q.search_terms = terms
     q.limit = detect_limit(ql)
     for gran_name, gran_pat in _GRAN:

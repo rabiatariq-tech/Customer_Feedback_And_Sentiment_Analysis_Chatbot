@@ -226,7 +226,7 @@ def _build_where(
             clauses.append("sentiment_label = ?")
             params.append(sentiment)
     terms = [search] if isinstance(search, str) else list(search or [])
-    terms = [t.strip() for t in terms if t and t.strip()][:5]
+    terms = [t.strip() for t in terms if t and t.strip()][:12]
     if terms:
         # any of the terms may appear in the review text or the product name
         parts = []

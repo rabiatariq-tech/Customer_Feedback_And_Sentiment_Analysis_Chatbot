@@ -188,6 +188,16 @@ PLANNER_MODE=hybrid     # rules | hybrid (AI only when rules are unsure) | llm_f
 
 Check it with `python scripts/check_gemini.py` (uses one request).
 
+### Speed, timeouts and what a review must look like
+
+With `PLANNER_MODE=llm_first` every question that is not an action waits for Gemini (usually 2-4 seconds); `hybrid` answers clear
+questions instantly from the rules and only asks Gemini about the unsure ones. `python scripts/check_gemini.py` prints how long a real
+request takes on your connection. If Google does not answer within `LLM_TIMEOUT_SECONDS`, the rules answer instead and the reply says
+why; after two timeouts in a row the AI is skipped for a minute, so later questions are not slowed down too.
+
+A review typed into the chat or the form is refused (nothing is saved) when it cannot be a real review: a keyboard mash such as
+"mmmmmmmm" or "asdfghjkl", only symbols or numbers, or a single word. CSV import keeps its own row checks.
+
 ### Follow-up questions
 
 The chat keeps the **previous question's filters** (intent, sentiment, topic, product, period, topics left out; never review text) for the
@@ -205,7 +215,15 @@ new CSV clears the context.
 against the previous month, a month so far against the same days of the last month, anything else against the equally long period
 before) and shows, per product, positive and negative reviews and the negative share in both periods. The per-product changes add up
 exactly to the overall change. Products with fewer than 5 reviews in either period are marked "few reviews" and never named as
-drivers. The wording is "mostly accounted for by", never "caused": reviews show what changed, not why.
+drivers. The wording is "most of the rise comes from …", never "caused": reviews show what changed, not why.
+
+### How the answers are worded
+
+Answers are still built by code from SQL results (no AI writes them), but they are phrased like a person would say them: they lead with
+the answer, use plain words and contractions ("About a third of the 34 reviews about delivery are negative (11, or 32%)"), say
+"in October" rather than a date range, and add a short note about what the data covers when nothing matches. `services/wording.py`
+holds the small helpers (period and filter phrases, shares in words). The technical description in the "understood as" line is
+unchanged. An optional AI wording layer is a possible next step, not part of this version.
 
 ### AI-written summaries
 
@@ -237,3 +255,35 @@ regression test rather than an honest estimate. `evaluation/fresh_cases.py` is t
 are cached in `evaluation/.llm_cache.json` (thrown away automatically when the prompt or model changes), so the free quota can be spread
 over several days. With `--planner hybrid|gemini` the script spaces its calls out, waits out a per-minute rate limit and retries once, and
 leaves cases Gemini could not answer for API reasons out of the percentage (printed as "NOT SCORED").
+
+Complaint answers also name the specific problems (for example for customer support: rude or unhelpful staff, no reply to emails,
+long waits) by reading the review text for common problem phrases (`services/issues.py`). Questions like "Are customers happy with
+delivery?" start with a Yes / Mostly yes / Mixed / No before the numbers, and "Which product has the lowest average rating?" returns the
+lowest, not the best. A message can hold up to five questions, and "How is A doing compared to B?" compares the two products.
+
+## Deploying the public demo (Streamlit Community Cloud, free)
+
+1. **Build the demo data once, on your computer** (venv active). It runs the real sentiment model over the 246 demo reviews and saves
+   `data/demo_seed.db`, so visitors see data immediately and the app does not load the 500 MB model just to open:
+   `python scripts/build_demo_seed.py`
+2. **Put the project on GitHub** (public repository). Check that no secret goes up: `.env` and `.streamlit/secrets.toml` are git-ignored,
+   and `data/demo_seed.db` must be included. `git ls-files` should list `data/demo_seed.db` and must not list `.env`.
+3. **Create the app** at https://share.streamlit.io: New app, pick the repository, branch `main`, main file `app.py`.
+   Under *Advanced settings* choose **Python 3.12** and paste the contents of `.streamlit/secrets.toml.example` into *Secrets*
+   (replace the key with your own). The first build takes several minutes (PyTorch).
+4. **Test the live link** in a private window: ask a few questions, open Data view, add a review (this is the first time the model loads),
+   upload `data/sample_reviews.csv`.
+5. Keep billing **off** on the Google project. When the daily AI limit is used up, the app keeps answering with its rules.
+
+Notes: free apps sleep after a period without visitors and wake in about a minute; visitors never see each other's data (each session has
+its own temporary database); `requirements-dev.txt` adds `pytest` for running the tests locally.
+
+## Decision questions (round 12)
+
+`services/owner_questions.py` answers questions an owner asks to decide something, with fixed rules and SQL counts (no AI call):
+"Which product is safest to promote?", "Which product should I stop selling or improve first?", "Are price complaints bigger than
+delivery complaints?", "Are customers who complain about delivery also unhappy with the product itself?", "Which products have mixed
+reviews?", "Give me 3 examples of customers complaining about packaging", "Which issue is hurting <product> the most?". Recommendations
+give less credit to products with few reviews (fewer than 8 are left out) and say that reviews show opinion, not profit or stock.
+"Which product improved the most since July?" compares the earlier and later half of the reviews since July. Searching for "damaged"
+also finds "crushed", "cracked" and so on (`services/concepts.py`). Dates the question never mentioned are removed from AI plans.

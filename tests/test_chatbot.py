@@ -386,7 +386,7 @@ def seed_owner(db):
 def test_ranking_reports_ties_and_rates(db):
     seed_owner(db)
     t = text_of(ask(db, "Which product do customers complain about the most?"))
-    assert "tied for the most negative reviews" in t and "Compared with its size" in t
+    assert "tied for the most negative reviews" in t and "As a share of its own reviews" in t
 
 
 def test_rating_ranking_shows_rated_counts_and_caveat(db):
@@ -895,3 +895,128 @@ def test_peak_day_is_written_as_a_date_and_unitless_questions_use_months(db):
     assert "Monday, Sep 28, 2026" in text_of(chatbot._answer(q, "When did we get the most negative reviews by day?", db, date(2026, 10, 26), None, None))
     q = Query(intent="peak", sentiment="negative", granularity="day", source="ai")
     assert "September 2026" in text_of(chatbot._answer(q, "When did we get the most negative reviews?", db, date(2026, 10, 26), None, None))
+
+
+def test_ranking_question_with_why_explains_the_product_it_named(db):
+    """Reported: "Which product gets the most complaints and why?" sometimes dropped the why, and otherwise explained ALL reviews."""
+    for i in range(4):
+        add(db, "The support agent was rude", "negative", "Lamp", f"2026-10-0{i + 1}")
+    add(db, "Fine", "positive", "Lamp", "2026-10-06")
+    add(db, "Broke after a day", "negative", "Blender", "2026-10-07")
+    add(db, "Great", "positive", "Blender", "2026-10-08")
+    add(db, "Great", "positive", "Blender", "2026-10-09")
+    r = ask(db, "Which product gets the most complaints and why?")
+    heads = [b["text"] for b in r["blocks"] if b["type"] == "text" and b["text"].startswith("**") and b["text"][2:3].isdigit()]
+    assert heads == ["**1. Which product gets the most complaints?**", "**2. Why is Lamp at the top?**"]
+    t = text_of(r)
+    assert "reviews for Lamp" in t and "rude or unhelpful staff" in t
+    assert r["query"].product == "Lamp"
+
+
+def test_why_after_an_ordinary_question_is_left_alone(db):
+    seed_owner(db)
+    t = text_of(ask(db, "How many negative reviews are there, and why?"))
+    assert "Why is" not in t
+
+
+# ---------------------------------------------------------------------------
+# Round 12: decision questions and other failures from Rabia's live test of 20 owner questions
+# ---------------------------------------------------------------------------
+def _shop(db):
+    """Lamp is loved, Blender is disliked, Gadget is liked but has only 3 reviews, Chair is split."""
+    for i in range(9):
+        add(db, "Lovely lamp, great quality", "positive", "Lamp", f"2026-09-{i + 1:02d}", rating=5)
+    add(db, "Lamp delivery was late", "negative", "Lamp", "2026-09-12", rating=2)
+    for i in range(3):
+        add(db, "Great gadget", "positive", "Gadget", f"2026-09-{i + 1:02d}", rating=5)
+    for i in range(6):
+        add(db, "Blender arrived broken, poor quality", "negative", "Blender", f"2026-09-{i + 13:02d}", rating=1)
+    for i in range(3):
+        add(db, "Blender is fine", "positive", "Blender", f"2026-09-{i + 20:02d}", rating=4)
+    for i in range(4):
+        add(db, "Chair is comfortable", "positive", "Chair", f"2026-09-{i + 1:02d}", rating=4)
+    for i in range(4):
+        add(db, "Chair delivery took weeks and the box was crushed", "negative", "Chair", f"2026-09-{i + 5:02d}", rating=2)
+
+
+def test_promote_names_a_product_and_ignores_products_with_too_few_reviews(db):
+    _shop(db)
+    t = text_of(ask(db, "I'm launching a sale next week. Which product is safest to promote?"))
+    assert "**Lamp** looks like the safest product to promote" in t and "Gadget" in t and "fewer than 8 reviews" in t
+    assert "**Gadget** looks" not in t
+
+
+def test_improve_first_names_the_product_with_the_worst_record(db):
+    _shop(db)
+    t = text_of(ask(db, "Which product should I stop selling or improve first?"))
+    assert "**Blender** needs attention first" in t and "business decision" in t
+
+
+def test_one_topic_is_compared_with_another(db):
+    _shop(db)
+    t = text_of(ask(db, "Are our price complaints bigger than our delivery complaints?"))
+    assert "**Delivery** has more complaints" in t and "than **price**" in t
+    assert "last" not in t.lower().split("delivery")[0]  # not a comparison of two time periods
+
+
+def test_reviews_that_mention_two_topics_are_counted(db):
+    _shop(db)
+    t = text_of(ask(db, "Are customers who complain about delivery also unhappy with the product itself?"))
+    assert t.startswith(("Some do", "Only a few do", "Many do")) and "also mention product quality" in t
+
+
+def test_mixed_reviews_ranks_products_by_how_split_they_are(db):
+    _shop(db)
+    t = text_of(ask(db, "Which products have mixed reviews?"))
+    assert "**Chair** has the most mixed feedback" in t
+
+
+def test_n_examples_becomes_a_list_of_that_size(db):
+    _shop(db)
+    r = ask(db, "Give me 3 examples of customers complaining about packaging.")
+    rows = next(b for b in r["blocks"] if b["type"] == "reviews")["rows"]
+    assert len(rows) == 3 and all(x["sentiment"] == "negative" for x in rows)
+
+
+def test_which_issue_is_hurting_a_product_is_a_why_about_that_product(db):
+    _shop(db)
+    t = text_of(ask(db, "Which issue is hurting Blender the most?"))
+    assert "reviews for Blender" in t and "product quality" in t
+
+
+def test_since_a_month_compares_the_first_half_with_the_second_half_of_the_data(db):
+    _shop(db)
+    for i in range(6):
+        add(db, "Lamp delivery was late", "negative", "Lamp", f"2026-10-{i + 1:02d}", rating=1)
+    t = text_of(ask(db, "Which product has improved the most since September?"))
+    assert "Comparing" in t and "Mar" not in t and "Feb" not in t and "no reviews" not in t.lower().split("comparing")[0]
+
+
+def test_a_question_with_its_own_subject_does_not_borrow_the_previous_one(db):
+    """Reported: "battery life" was answered for Wooden Chair, a product from an earlier question."""
+    from services.chat_parser import may_refer_back, parse
+    _shop(db)
+    q = parse("What are customers saying about battery life?", ["Lamp", "Chair"], TODAY)
+    assert not may_refer_back("What are customers saying about battery life?", q)
+    assert "battery" in q.search_terms and "life" not in q.search_terms
+    assert may_refer_back("and for September?", parse("and for September?", ["Lamp"], TODAY))
+
+
+def test_dates_the_question_never_mentioned_are_detected():
+    from services.chat_parser import mentions_time
+    assert not mentions_time("Which issue is hurting Smart Speaker the most?", TODAY)
+    assert mentions_time("Which issue is hurting Smart Speaker in September?", TODAY) and mentions_time("what happened last week", TODAY)
+
+
+def test_who_a_summary_is_for_is_not_searched_for(db):
+    from services.chat_parser import parse
+    assert parse("Write a short summary of customer feedback for my manager.", ["Lamp"], TODAY).search_terms == []
+
+
+def test_damaged_also_finds_crushed_and_broken(db):
+    from services import concepts
+    _shop(db)
+    t = text_of(ask(db, "Are there any reviews mentioning damaged items?"))
+    assert "couldn't find any" not in t
+    assert "crush" in concepts.expand(["damaged items"])
+    assert concepts.expand(["battery life"])[0] == "battery" and concepts.expand(["life"]) == []
